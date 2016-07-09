@@ -8,5 +8,6 @@
     <string name="action_share">Share</string>
 
     <string name="up">Up</string>
+    <string name="backdrop_image_content_description">Backdrop Image</string>
 
 </resources>
