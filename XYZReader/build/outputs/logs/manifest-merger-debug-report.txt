@@ -147,6 +147,7 @@ MERGED from [com.android.support:support-v4:24.0.0] /media/aman/Backup/Tutorials
 MERGED from [com.android.support:animated-vector-drawable:24.0.0] /media/aman/Backup/Tutorials/Nanodegree/xyzreader/XYZReader/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/24.0.0/AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:support-vector-drawable:24.0.0] /media/aman/Backup/Tutorials/Nanodegree/xyzreader/XYZReader/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/24.0.0/AndroidManifest.xml:21:5-43
 MERGED from [com.android.support:support-v4:24.0.0] /media/aman/Backup/Tutorials/Nanodegree/xyzreader/XYZReader/build/intermediates/exploded-aar/com.android.support/support-v4/24.0.0/AndroidManifest.xml:21:5-23:54
+MERGED from [com.jakewharton:butterknife:8.1.0] /media/aman/Backup/Tutorials/Nanodegree/xyzreader/XYZReader/build/intermediates/exploded-aar/com.jakewharton/butterknife/8.1.0/AndroidManifest.xml:5:5-43
 	android:targetSdkVersion
 		INJECTED from /media/aman/Backup/Tutorials/Nanodegree/xyzreader/XYZReader/src/main/AndroidManifest.xml
 		INJECTED from /media/aman/Backup/Tutorials/Nanodegree/xyzreader/XYZReader/src/main/AndroidManifest.xml

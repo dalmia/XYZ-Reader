@@ -11,6 +11,6 @@
     <dimen name="list_margin_top">16dp</dimen>
     <dimen name="list_margin_bottom">16dp</dimen>
     <dimen name="swipe_refresh_elevation">3dp</dimen>
-    <dimen name="dimen_toolbar_detail">300dp</dimen>
+    <dimen name="detail_toolbar_height">300dp</dimen>
 
 </resources>
