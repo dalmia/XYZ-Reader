@@ -24,6 +24,7 @@ import com.example.xyzreader.data.ItemsContract;
 import com.example.xyzreader.data.UpdaterService;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * An activity representing a list of Articles. This activity has different presentations for
@@ -35,23 +36,25 @@ public class ArticleListActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
 
     @BindView(R.id.toolbar)
-    private Toolbar mToolbar;
+    Toolbar mToolbar;
     @BindView(R.id.swipe_refresh_layout)
-    private SwipeRefreshLayout mSwipeRefreshLayout;
+    SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.recycler_view)
-    private RecyclerView mRecyclerView;
+    RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article_list);
-
+        ButterKnife.bind(this);
         final View toolbarContainerView = findViewById(R.id.toolbar_container);
         getLoaderManager().initLoader(0, null, this);
 
         if (savedInstanceState == null) {
             refresh();
         }
+
+        setSupportActionBar(mToolbar);
     }
 
     private void refresh() {

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -49,11 +48,10 @@ public class ArticleDetailFragment extends Fragment implements
     private int mMutedColor = 0xFF333333;
 
     private View mPhotoContainerView;
-    @BindView(R.id.photo)
-    private ImageView mPhotoView;
+    ImageView mPhotoView;
 
     @BindView(R.id.scrollview)
-    private ScrollView mScrollView;
+    ScrollView mScrollView;
     private ColorDrawable mStatusBarColorDrawable;
 
     private int mTopInset;
@@ -115,8 +113,8 @@ public class ArticleDetailFragment extends Fragment implements
             mScrollView.setNestedScrollingEnabled(true);
 
         mStatusBarColorDrawable = new ColorDrawable(0);
-
-        mRootView.findViewById(R.id.share_fab).setOnClickListener(new View.OnClickListener() {
+        mPhotoView = (ImageView) getActivity().findViewById(R.id.photo);
+        getActivity().findViewById(R.id.share_fab).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(Intent.createChooser(ShareCompat.IntentBuilder.from(getActivity())
@@ -168,7 +166,6 @@ public class ArticleDetailFragment extends Fragment implements
         TextView bylineView = (TextView) mRootView.findViewById(R.id.article_byline);
         bylineView.setMovementMethod(new LinkMovementMethod());
         TextView bodyView = (TextView) mRootView.findViewById(R.id.article_body);
-        bodyView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Rosario-Regular.ttf"));
 
         if (mCursor != null) {
             mRootView.setAlpha(0);
