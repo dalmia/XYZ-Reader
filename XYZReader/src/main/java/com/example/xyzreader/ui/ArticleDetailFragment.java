@@ -2,10 +2,12 @@ package com.example.xyzreader.ui;
 
 import android.app.Fragment;
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ShareCompat;
@@ -21,10 +23,11 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +40,8 @@ import butterknife.ButterKnife;
 public class ArticleDetailFragment extends Fragment implements
         LoaderManager.LoaderCallbacks<Cursor> {
     private static final String TAG = "ArticleDetailFragment";
+    private static final String THUMBNAIL = "THUMBNAIL";
+    private static final String FULL_SIZE = "FULL_SIZE";
 
     public static final String ARG_ITEM_ID = "item_id";
 
@@ -141,33 +146,67 @@ public class ArticleDetailFragment extends Fragment implements
         }
     }
 
-        public void setToolbarImage(){
-        if(mCursor != null){
-            setBackgroundImage(mCursor.getString(ArticleLoader.Query.THUMB_URL));
-            setBackgroundImage(mCursor.getString(ArticleLoader.Query.PHOTO_URL));
+    public void setToolbarImage() {
+        if (mCursor != null) {
+            setBackgroundImage(mCursor.getString(ArticleLoader.Query.THUMB_URL), THUMBNAIL);
         }
     }
 
-    public void setBackgroundImage(String url) {
-        ImageLoaderHelper.getInstance(getActivity()).getImageLoader()
-                .get(url, new ImageLoader.ImageListener() {
+    private void setBackgroundImage(String url, final String type) {
+        final Context context = getActivity().getApplicationContext();
+        final String imageURL = url;
+        Picasso.with(context)
+                .load(imageURL)
+                .networkPolicy(NetworkPolicy.OFFLINE)
+                .noPlaceholder()
+                .fit()
+                .centerCrop()
+                .into(mPhotoView, new Callback() {
                     @Override
-                    public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
-                        Bitmap bitmap = imageContainer.getBitmap();
-                        if (bitmap != null) {
-                            Palette p = Palette.generate(bitmap, 12);
-                            mMutedColor = p.getDarkMutedColor(0xFF333333);
-                            mPhotoView.setImageBitmap(imageContainer.getBitmap());
-                            mRootView.findViewById(R.id.meta_bar)
-                                    .setBackgroundColor(mMutedColor);
+                    public void onSuccess() {
+                        if (type.equals(THUMBNAIL)) {
+                            setTitleBackgroundDark();
+                            setBackgroundImage(mCursor.getString(ArticleLoader.Query.PHOTO_URL), FULL_SIZE);
                         }
                     }
 
                     @Override
-                    public void onErrorResponse(VolleyError volleyError) {
+                    public void onError() {
+                        Picasso.with(context)
+                                .load(imageURL)
+                                .noPlaceholder()
+                                .fit()
+                                .centerCrop()
+                                .into(mPhotoView, new Callback() {
+                                    @Override
+                                    public void onSuccess() {
+                                        if (type.equals(THUMBNAIL)){
+                                            setTitleBackgroundDark();
+                                            setBackgroundImage(mCursor.getString(ArticleLoader.Query.PHOTO_URL), FULL_SIZE);
+                                        }
+                                    }
 
+                                    @Override
+                                    public void onError() {
+
+                                    }
+                                });
                     }
                 });
+    }
+
+    public void setTitleBackgroundDark() {
+        Palette.PaletteAsyncListener listener = new Palette.PaletteAsyncListener() {
+            @Override
+            public void onGenerated(Palette palette) {
+                mMutedColor = palette.getDarkMutedColor(0xFF333333);
+                mRootView.findViewById(R.id.meta_bar)
+                        .setBackgroundColor(mMutedColor);
+            }
+        };
+        Bitmap bitmap = ((BitmapDrawable) mPhotoView.getDrawable()).getBitmap();
+        if (bitmap != null && !bitmap.isRecycled()) {
+        }
     }
 
     @Override

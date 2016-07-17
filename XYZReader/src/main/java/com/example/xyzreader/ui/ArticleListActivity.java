@@ -23,6 +23,9 @@ import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
 import com.example.xyzreader.data.ItemsContract;
 import com.example.xyzreader.data.UpdaterService;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,7 +37,7 @@ import butterknife.ButterKnife;
  * activity presents a grid of items as cards.
  */
 public class ArticleListActivity extends AppCompatActivity implements
-        LoaderManager.LoaderCallbacks<Cursor> {
+        LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -42,6 +45,7 @@ public class ArticleListActivity extends AppCompatActivity implements
     SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
+    private boolean mIsRefreshing = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +53,7 @@ public class ArticleListActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_article_list);
         ButterKnife.bind(this);
         getLoaderManager().initLoader(0, null, this);
-
+        mSwipeRefreshLayout.setOnRefreshListener(this);
         if (savedInstanceState == null) {
             refresh();
         }
@@ -74,7 +78,6 @@ public class ArticleListActivity extends AppCompatActivity implements
         unregisterReceiver(mRefreshingReceiver);
     }
 
-    private boolean mIsRefreshing = false;
 
     private BroadcastReceiver mRefreshingReceiver = new BroadcastReceiver() {
         @Override
@@ -109,6 +112,13 @@ public class ArticleListActivity extends AppCompatActivity implements
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mRecyclerView.setAdapter(null);
+    }
+
+    @Override
+    public void onRefresh() {
+        if (!mIsRefreshing) {
+            refresh();
+        }
     }
 
     private class Adapter extends RecyclerView.Adapter<ViewHolder> {
@@ -155,10 +165,36 @@ public class ArticleListActivity extends AppCompatActivity implements
                             DateUtils.FORMAT_ABBREV_ALL).toString()
                             + " by "
                             + mCursor.getString(ArticleLoader.Query.AUTHOR));
-            holder.thumbnailView.setImageUrl(
-                    mCursor.getString(ArticleLoader.Query.THUMB_URL),
-                    ImageLoaderHelper.getInstance(ArticleListActivity.this).getImageLoader());
-            holder.thumbnailView.setAspectRatio(mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO));
+            final DynamicHeightNetworkImageView thumbnail = holder.thumbnailView;
+            final String thumbnailURL = mCursor.getString(ArticleLoader.Query.THUMB_URL);
+            final float aspectRatio = mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO);
+            Picasso.with(getApplicationContext())
+                    .load(thumbnailURL)
+                    .networkPolicy(NetworkPolicy.OFFLINE)
+                    .into(thumbnail, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            thumbnail.setAspectRatio(aspectRatio);
+                        }
+
+                        @Override
+                        public void onError() {
+                            Picasso.with(getApplicationContext())
+                                    .load(thumbnailURL)
+                                    .networkPolicy(NetworkPolicy.OFFLINE)
+                                    .into(thumbnail, new Callback() {
+                                        @Override
+                                        public void onSuccess() {
+                                            thumbnail.setAspectRatio(aspectRatio);
+                                        }
+
+                                        @Override
+                                        public void onError() {
+
+                                        }
+                                    });
+                        }
+                    });
         }
 
         @Override
