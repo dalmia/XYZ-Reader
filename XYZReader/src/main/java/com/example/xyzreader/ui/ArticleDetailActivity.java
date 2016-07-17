@@ -3,6 +3,7 @@ package com.example.xyzreader.ui;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.LoaderManager;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
@@ -51,6 +52,7 @@ public class ArticleDetailActivity extends AppCompatActivity
         ButterKnife.bind(this);
         getLoaderManager().initLoader(0, null, this);
         setupViewPager();
+        postponeTransition();
 
         if (savedInstanceState == null) {
             if (getIntent() != null && getIntent().getData() != null) {
@@ -79,6 +81,12 @@ public class ArticleDetailActivity extends AppCompatActivity
         getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
+    @Override
+    public void onActivityReenter(int resultCode, Intent data) {
+        super.onActivityReenter(resultCode, data);
+        postponeTransition();
+    }
+
     public void setupViewPager(){
         mPagerAdapter = new MyPagerAdapter(getFragmentManager());
         mPager = (ViewPager) findViewById(R.id.pager);
@@ -100,9 +108,14 @@ public class ArticleDetailActivity extends AppCompatActivity
                     mCursor.moveToPosition(position);
                 }
                 mSelectedItemId = mCursor.getLong(ArticleLoader.Query._ID);
-
             }
         });
+    }
+
+    public void postponeTransition(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            postponeEnterTransition();
+        }
     }
 
     @Override

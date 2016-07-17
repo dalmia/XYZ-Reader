@@ -152,6 +152,12 @@ public class ArticleDetailFragment extends Fragment implements
         }
     }
 
+    private void startPostponeTransition(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            getActivity().startPostponedEnterTransition();
+        }
+    }
+
     private void setBackgroundImage(String url, final String type) {
         final Context context = getActivity().getApplicationContext();
         final String imageURL = url;
@@ -166,6 +172,7 @@ public class ArticleDetailFragment extends Fragment implements
                     public void onSuccess() {
                         if (type.equals(THUMBNAIL)) {
                             setTitleBackgroundDark();
+                            startPostponeTransition();
                             setBackgroundImage(mCursor.getString(ArticleLoader.Query.PHOTO_URL), FULL_SIZE);
                         }
                     }
@@ -182,13 +189,14 @@ public class ArticleDetailFragment extends Fragment implements
                                     public void onSuccess() {
                                         if (type.equals(THUMBNAIL)){
                                             setTitleBackgroundDark();
+                                            startPostponeTransition();
                                             setBackgroundImage(mCursor.getString(ArticleLoader.Query.PHOTO_URL), FULL_SIZE);
                                         }
                                     }
 
                                     @Override
                                     public void onError() {
-
+                                        startPostponeTransition();
                                     }
                                 });
                     }

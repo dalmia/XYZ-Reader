@@ -144,7 +144,7 @@ public class ArticleListActivity extends AppCompatActivity implements
                     ActivityOptionsCompat options = ActivityOptionsCompat
                             .makeSceneTransitionAnimation(
                                     ArticleListActivity.this,
-                                    (View) vh.thumbnailView,
+                                    vh.thumbnailView,
                                     "backdrop_image");
 
                     startActivity(new Intent(Intent.ACTION_VIEW,

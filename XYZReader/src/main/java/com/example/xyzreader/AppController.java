@@ -15,7 +15,7 @@ public class AppController extends Application {
         Picasso.Builder builder = new Picasso.Builder(this);
         builder.downloader(new OkHttpDownloader(this, Integer.MAX_VALUE));
         Picasso instance = builder.build();
-        instance.setIndicatorsEnabled(true);
+        instance.setIndicatorsEnabled(false);
         if(BuildConfig.DEBUG){
             instance.setLoggingEnabled(true);
         }
