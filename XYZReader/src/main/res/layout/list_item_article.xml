@@ -21,7 +21,8 @@
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:background="@color/photo_placeholder"
-            android:transitionName="backdrop_image"/>
+            android:contentDescription="@string/backdrop_image_content_description"
+            android:transitionName="@string/backdrop_image_transition_name" />
 
         <TextView
             android:id="@+id/article_title"

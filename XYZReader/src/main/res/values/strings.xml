@@ -1,13 +1,16 @@
 <resources>
 
+    <!-- app -->
     <string name="app_name">XYZ Reader</string>
     <string name="welcome_xyz_reader">Welcome to XYZ Reader!</string>
 
-    <string name="action_refresh">Refresh</string>
-    <string name="action_settings">Settings</string>
+    <!-- fab share intent key -->
     <string name="action_share">Share</string>
 
-    <string name="up">Up</string>
+    <!-- Content Description for the backdrop image -->
     <string name="backdrop_image_content_description">Backdrop Image</string>
+
+    <!-- Transition name for the shared backdrop image -->
+    <string name="backdrop_image_transition_name">backdrop_image</string>
 
 </resources>

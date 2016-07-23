@@ -6,12 +6,14 @@ import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 
 /**
- * Created by aman on 17/7/16.
+ * Application instance
  */
 public class AppController extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        // Build a Picasso Instance
         Picasso.Builder builder = new Picasso.Builder(this);
         builder.downloader(new OkHttpDownloader(this, Integer.MAX_VALUE));
         Picasso instance = builder.build();
@@ -19,6 +21,7 @@ public class AppController extends Application {
         if(BuildConfig.DEBUG){
             instance.setLoggingEnabled(true);
         }
+        // Set the singleton instance
         Picasso.setSingletonInstance(instance);
     }
 }

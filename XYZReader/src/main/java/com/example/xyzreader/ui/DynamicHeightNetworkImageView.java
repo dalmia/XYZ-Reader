@@ -4,6 +4,9 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
+/**
+ * Custom View used in the article list item
+ */
 public class DynamicHeightNetworkImageView extends ImageView {
     private float mAspectRatio = 1.5f;
 

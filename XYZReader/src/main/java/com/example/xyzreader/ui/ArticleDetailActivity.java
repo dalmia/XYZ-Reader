@@ -35,7 +35,6 @@ public class ArticleDetailActivity extends AppCompatActivity
     private long mStartId;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    private long mSelectedItemId;
 
     private ViewPager mPager;
     private MyPagerAdapter mPagerAdapter;
@@ -57,7 +56,6 @@ public class ArticleDetailActivity extends AppCompatActivity
         if (savedInstanceState == null) {
             if (getIntent() != null && getIntent().getData() != null) {
                 mStartId = ItemsContract.Items.getItemId(getIntent().getData());
-                mSelectedItemId = mStartId;
             }
         }
 
@@ -66,7 +64,7 @@ public class ArticleDetailActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 supportFinishAfterTransition();
                 return true;
@@ -74,9 +72,14 @@ public class ArticleDetailActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    public void setupToolbar(){
+    /**
+     * Setup the Toolbar as the SupportActionBar for the Activity
+     */
+    public void setupToolbar() {
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
@@ -87,7 +90,10 @@ public class ArticleDetailActivity extends AppCompatActivity
         postponeTransition();
     }
 
-    public void setupViewPager(){
+    /**
+     * Setup the ViewPager
+     */
+    public void setupViewPager() {
         mPagerAdapter = new MyPagerAdapter(getFragmentManager());
         mPager = (ViewPager) findViewById(R.id.pager);
         mPager.setAdapter(mPagerAdapter);
@@ -107,13 +113,15 @@ public class ArticleDetailActivity extends AppCompatActivity
                 if (mCursor != null) {
                     mCursor.moveToPosition(position);
                 }
-                mSelectedItemId = mCursor.getLong(ArticleLoader.Query._ID);
             }
         });
     }
 
-    public void postponeTransition(){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+    /**
+     * Postpones the Enter Transition for Lollipop devices and higher
+     */
+    public void postponeTransition() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             postponeEnterTransition();
         }
     }
@@ -131,7 +139,6 @@ public class ArticleDetailActivity extends AppCompatActivity
         // Select the start ID
         if (mStartId > 0) {
             mCursor.moveToFirst();
-            // TODO: optimize
             while (!mCursor.isAfterLast()) {
                 if (mCursor.getLong(ArticleLoader.Query._ID) == mStartId) {
                     final int position = mCursor.getPosition();
@@ -150,6 +157,9 @@ public class ArticleDetailActivity extends AppCompatActivity
         mPagerAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Custom FragmentPagerAdapter
+     */
     private class MyPagerAdapter extends FragmentStatePagerAdapter {
         public MyPagerAdapter(FragmentManager fm) {
             super(fm);

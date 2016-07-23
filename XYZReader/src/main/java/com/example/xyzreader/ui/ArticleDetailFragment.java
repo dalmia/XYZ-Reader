@@ -114,13 +114,16 @@ public class ArticleDetailFragment extends Fragment implements
         return mRootView;
     }
 
+    /**
+     * Binds the views to the respective IDs once the article is successfully loaded
+     */
     private void bindViews() {
         if (mRootView == null) {
             return;
         }
 
         TextView titleView = (TextView) mRootView.findViewById(R.id.article_title);
-        TextView bylineView = (TextView) mRootView.findViewById(R.id.article_byline);
+        TextView bylineView = (TextView) mRootView.findViewById(R.id.article_by_text);
         bylineView.setMovementMethod(new LinkMovementMethod());
         TextView bodyView = (TextView) mRootView.findViewById(R.id.article_body);
 
@@ -146,23 +149,29 @@ public class ArticleDetailFragment extends Fragment implements
         }
     }
 
+    /**
+     * Set the background Image when the FragmentPagerAdapter is instantiated
+     */
     public void setToolbarImage() {
         if (mCursor != null) {
             setBackgroundImage(mCursor.getString(ArticleLoader.Query.THUMB_URL), THUMBNAIL);
         }
     }
 
+    /**
+     * For lollipop devices and above, begins the postponed transitions after
+     * postponeEnterTransition is called
+     */
     private void startPostponeTransition(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             getActivity().startPostponedEnterTransition();
         }
     }
 
-    private void setBackgroundImage(String url, final String type) {
+    private void setBackgroundImage(final String url, final String type) {
         final Context context = getActivity().getApplicationContext();
-        final String imageURL = url;
         Picasso.with(context)
-                .load(imageURL)
+                .load(url)
                 .networkPolicy(NetworkPolicy.OFFLINE)
                 .noPlaceholder()
                 .fit()
@@ -180,7 +189,7 @@ public class ArticleDetailFragment extends Fragment implements
                     @Override
                     public void onError() {
                         Picasso.with(context)
-                                .load(imageURL)
+                                .load(url)
                                 .noPlaceholder()
                                 .fit()
                                 .centerCrop()
@@ -203,6 +212,10 @@ public class ArticleDetailFragment extends Fragment implements
                 });
     }
 
+    /**
+     * Sets the Title color for the background once the image is successfully loaded
+     * by Picasso
+     */
     public void setTitleBackgroundDark() {
         Palette.PaletteAsyncListener listener = new Palette.PaletteAsyncListener() {
             @Override
@@ -214,6 +227,7 @@ public class ArticleDetailFragment extends Fragment implements
         };
         Bitmap bitmap = ((BitmapDrawable) mPhotoView.getDrawable()).getBitmap();
         if (bitmap != null && !bitmap.isRecycled()) {
+            Palette.from(bitmap).generate(listener);
         }
     }
 

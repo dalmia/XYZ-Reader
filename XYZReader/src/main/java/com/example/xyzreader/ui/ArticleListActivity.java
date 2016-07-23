@@ -13,7 +13,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,8 +38,7 @@ import butterknife.ButterKnife;
 public class ArticleListActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor>, SwipeRefreshLayout.OnRefreshListener {
 
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
+
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.recycler_view)
@@ -52,13 +50,13 @@ public class ArticleListActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article_list);
         ButterKnife.bind(this);
+        // Initiate the loader
         getLoaderManager().initLoader(0, null, this);
         mSwipeRefreshLayout.setOnRefreshListener(this);
         if (savedInstanceState == null) {
             refresh();
         }
 
-        setSupportActionBar(mToolbar);
     }
 
     private void refresh() {
@@ -121,6 +119,9 @@ public class ArticleListActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * Custom adapter for the recycler view
+     */
     private class Adapter extends RecyclerView.Adapter<ViewHolder> {
         private Cursor mCursor;
 
@@ -145,7 +146,7 @@ public class ArticleListActivity extends AppCompatActivity implements
                             .makeSceneTransitionAnimation(
                                     ArticleListActivity.this,
                                     vh.thumbnailView,
-                                    "backdrop_image");
+                                    getString(R.string.backdrop_image_transition_name));
 
                     startActivity(new Intent(Intent.ACTION_VIEW,
                             ItemsContract.Items.buildItemUri(getItemId(vh.getAdapterPosition()))), options.toBundle());
@@ -158,13 +159,14 @@ public class ArticleListActivity extends AppCompatActivity implements
         public void onBindViewHolder(ViewHolder holder, int position) {
             mCursor.moveToPosition(position);
             holder.titleView.setText(mCursor.getString(ArticleLoader.Query.TITLE));
-            holder.subtitleView.setText(
-                    DateUtils.getRelativeTimeSpanString(
-                            mCursor.getLong(ArticleLoader.Query.PUBLISHED_DATE),
-                            System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
-                            DateUtils.FORMAT_ABBREV_ALL).toString()
-                            + " by "
-                            + mCursor.getString(ArticleLoader.Query.AUTHOR));
+            String subtitleText =  DateUtils.getRelativeTimeSpanString(
+                    mCursor.getLong(ArticleLoader.Query.PUBLISHED_DATE),
+                    System.currentTimeMillis(), DateUtils.HOUR_IN_MILLIS,
+                    DateUtils.FORMAT_ABBREV_ALL).toString()
+                    + " by "
+                    + mCursor.getString(ArticleLoader.Query.AUTHOR);
+            holder.subtitleView.setText(subtitleText);
+
             final DynamicHeightNetworkImageView thumbnail = holder.thumbnailView;
             final String thumbnailURL = mCursor.getString(ArticleLoader.Query.THUMB_URL);
             final float aspectRatio = mCursor.getFloat(ArticleLoader.Query.ASPECT_RATIO);

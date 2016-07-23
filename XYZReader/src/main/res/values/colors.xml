@@ -24,6 +24,6 @@
     <color name="white">#fff</color>
     <color name="subtitle_color">#6000</color>
     <color name="article_title_color">#fff</color>
-    <color name="article_byline">#8fff</color>
+    <color name="article_by_text">#8fff</color>
     <color name="default_background">#333</color>
 </resources>

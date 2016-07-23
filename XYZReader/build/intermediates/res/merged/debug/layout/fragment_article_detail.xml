@@ -1,5 +1,4 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/scrollview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -42,11 +41,11 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/article_byline"
+                    android:id="@+id/article_by_text"
                     style="?android:attr/textAppearanceSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/article_byline" />
+                    android:textColor="@color/article_by_text" />
             </LinearLayout>
 
             <TextView

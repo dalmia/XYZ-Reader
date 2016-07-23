@@ -13,11 +13,11 @@
                 "from": {
                     "file": "/media/aman/Backup/Tutorials/Nanodegree/xyzreader/XYZReader/src/main/res/values-w800dp/macro_layout.xml",
                     "position": {
-                        "startLine": 7,
+                        "startLine": 6,
                         "startColumn": 4,
-                        "startOffset": 232,
+                        "startOffset": 182,
                         "endColumn": 53,
-                        "endOffset": 281
+                        "endOffset": 231
                     }
                 }
             },
@@ -56,25 +56,6 @@
                         "startOffset": 82,
                         "endColumn": 55,
                         "endOffset": 133
-                    }
-                }
-            },
-            {
-                "to": {
-                    "startLine": 5,
-                    "startColumn": 4,
-                    "startOffset": 213,
-                    "endColumn": 49,
-                    "endOffset": 258
-                },
-                "from": {
-                    "file": "/media/aman/Backup/Tutorials/Nanodegree/xyzreader/XYZReader/src/main/res/values-w800dp/macro_layout.xml",
-                    "position": {
-                        "startLine": 4,
-                        "startColumn": 4,
-                        "startOffset": 161,
-                        "endColumn": 49,
-                        "endOffset": 206
                     }
                 }
             }

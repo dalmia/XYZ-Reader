@@ -23,7 +23,7 @@ public class RemoteEndpointUtil {
     }
 
     public static JSONArray fetchJsonArray() {
-        String itemsJson = null;
+        String itemsJson;
         try {
             itemsJson = fetchPlainText(Config.BASE_URL);
         } catch (IOException e) {
@@ -46,10 +46,21 @@ public class RemoteEndpointUtil {
         return null;
     }
 
+    /**
+     * @param url - url from which the data is to be fetched
+     * @return the response JSON String received
+     * @throws IOException
+     */
     static String fetchPlainText(URL url) throws IOException {
         return new String(fetch(url), "UTF-8");
     }
 
+    /**
+     * fetch the response from the url and convert it to a byte array
+     * @param url - url from which the data is to be fetched
+     * @return byte array to be converted to a string using the proper charset
+     * @throws IOException
+     */
     static byte[] fetch(URL url) throws IOException{
         InputStream in = null;
         try {

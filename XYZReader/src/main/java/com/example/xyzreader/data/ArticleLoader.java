@@ -8,6 +8,7 @@ import android.net.Uri;
  * Helper for loading a list of articles or a single article.
  */
 public class ArticleLoader extends CursorLoader {
+
     public static ArticleLoader newAllArticlesInstance(Context context) {
         return new ArticleLoader(context, ItemsContract.Items.buildDirUri());
     }
@@ -20,7 +21,10 @@ public class ArticleLoader extends CursorLoader {
         super(context, uri, Query.PROJECTION, null, null, ItemsContract.Items.DEFAULT_SORT);
     }
 
+
     public interface Query {
+
+        // Projection Columns for populating the cursor
         String[] PROJECTION = {
                 ItemsContract.Items._ID,
                 ItemsContract.Items.TITLE,
@@ -32,6 +36,7 @@ public class ArticleLoader extends CursorLoader {
                 ItemsContract.Items.BODY,
         };
 
+        // Respective indices of the column results fetched by the Cursor
         int _ID = 0;
         int TITLE = 1;
         int PUBLISHED_DATE = 2;
